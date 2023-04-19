@@ -13,8 +13,8 @@ let points = {
   lhotse: new THREE.Vector3(-28.86,29.5,32.85)
 };
 let elTooltips = {
-  Torre: document.querySelector('#Torre'),
-  Velho: document.querySelector('#Velho'),
+  everest: document.querySelector('#everest'),
+  lhotseshar: document.querySelector('#lhotseshar'),
   nuptse: document.querySelector('#nuptse'),
   changtse: document.querySelector('#changtse'),
   lhotse: document.querySelector('#lhotse')
