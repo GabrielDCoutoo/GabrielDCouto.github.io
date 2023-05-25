@@ -1,8 +1,9 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
 import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/DRACOLoader.js';
 import gsap from 'https://cdn.skypack.dev/gsap@3.10.4';
+import Stats from 'https://cdn.skypack.dev/stats.js';
+import dat from 'https://cdn.skypack.dev/dat.gui';
 console.clear();
 
 let points = {
