@@ -1,9 +1,9 @@
-import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
+import * as THREE from 'three';
 import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
 import gsap from 'https://cdn.skypack.dev/gsap@3.10.4';
 import Stats from 'https://cdn.skypack.dev/stats.js';
 import dat from 'https://cdn.skypack.dev/dat.gui';
-import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 console.clear();
 
@@ -69,6 +69,7 @@ controls.maxPolarAngle = 2;
 controls.minDistance = 50;
 controls.maxDistance = 180;
 
+
 /* Handle auto rotation of the scene */
 let rotationTimeout = null;
 let firstChange = true;
@@ -96,11 +97,8 @@ controls.addEventListener('change', () => {
 const light = new THREE.HemisphereLight(0xffffff, 0x112B3C, 1);
 scene.add(light);
 
-let wireframeHelper;
-let mountain;
-/* MOUNTAIN */
 const loader = new GLTFLoader();
-loader.load('https://mamboleoo.be/CodePen/random/Brussels/everest.glb', (gltf) => {
+loader.loadAsync('https://mamboleoo.be/CodePen/random/Brussels/everest.glb', (gltf) => {
   mountain = gltf.scene.children[0].clone();
   // Modify and configure the mountain mesh as needed
 
