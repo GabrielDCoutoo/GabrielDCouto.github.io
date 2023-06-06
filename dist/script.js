@@ -1,10 +1,14 @@
-import * as THREE from 'three';
+import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
 import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/DRACOLoader.js';
 import gsap from 'https://cdn.skypack.dev/gsap@3.10.4';
 import Stats from 'https://cdn.skypack.dev/stats.js';
-import dat from 'https://cdn.skypack.dev/dat.gui';
+import  dat from 'https://cdn.skypack.dev/dat.gui';
+
+
 console.clear();
+
 
 let points = {
   everest: new THREE.Vector3(-37.86,33,3.2),
@@ -57,11 +61,20 @@ document.body.appendChild(renderer.domElement);
 
 /* CONTROLS */
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.autoRotate = true;
+controls.autoRotateSpeed = 2; // Adjust the speed as desired
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.maxPolarAngle = 2;
 controls.minDistance = 50;
 controls.maxDistance = 180;
+
+const gui = new dat.GUI();
+gui.add(camera.position, 'x', -200, 200);
+gui.add(camera.position, 'y', -200, 200);
+gui.add(camera.position, 'z', -200, 200);
+gui.add(camera, 'zoom', 50, 300);
+
 
 /* Handle auto rotation of the scene */
 let rotationTimeout = null;
@@ -181,6 +194,110 @@ function projectTooltips () {
     elTooltips[point].style.zIndex = 100 - Math.round((projection.z - 0.99) * 10000);
   } 
 }
+let snowflakes_count = 200;
+
+let base_css = `/animated-snowfall-effect/style.css`; // Put your custom base css here
+
+if (typeof total !== 'undefined'){
+    snowflakes_count = total;
+}
+
+
+// This function allows you to turn on and off the snow
+function toggle_snow() {
+    let check_box = document.getElementById("toggle_snow");
+    if (check_box.checked == true) {
+        document.getElementById('snow').style.display = "block";
+    }
+    else {
+        document.getElementById('snow').style.display = "none";
+    }
+}
+
+// Creating snowflakes
+function spawn_snow(snow_density = 200) {
+    snow_density -= 1;
+
+    for (let x = 0; x < snow_density; x++) {
+        let board = document.createElement('div');
+        board.className = "snowflake";
+
+        document.getElementById('snow').appendChild(board);
+    }
+}
+
+// Append style for each snowflake to the head
+function add_css(rule) {
+    let css = document.createElement('style');
+    css.type = 'text/css';
+    css.appendChild(document.createTextNode(rule)); // Support for the rest
+    document.getElementsByTagName("head")[0].appendChild(css);
+}
+
+
+
+// Math
+function random_int(value = 100){
+    return Math.floor(Math.random() * value) + 1;
+}
+
+function random_range(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+// Create style for snowflake
+function spawnSnowCSS(snow_density = 200){
+    let snowflake_name = "snowflake";
+    let rule = ``;
+    if (typeof base_css !== 'undefined'){
+        rule = base_css;
+    }
+    
+    for(let i = 1; i < snow_density; i++){
+        let random_x = Math.random() * 100; // vw
+        let random_offset = random_range(-100000, 100000) * 0.0001; // vw;
+        let random_x_end = random_x + random_offset;
+        let random_x_end_yoyo = random_x + (random_offset / 2);
+        let random_yoyo_time = random_range(30000, 80000) / 100000;
+        let random_yoyo_y = random_yoyo_time * 100; // vh
+        let random_scale = Math.random();
+        let fall_duration = random_range(10, 30) * 1; // s
+        let fall_delay = random_int(30) * -1; // s
+        let opacity_ = Math.random();
+
+        rule += `
+        .${snowflake_name}:nth-child(${i}) {
+            opacity: ${opacity_};
+            transform: translate(${random_x}vw, -10px) scale(${random_scale});
+            animation: fall-${i} ${fall_duration}s ${fall_delay}s linear infinite;
+        }
+
+        @keyframes fall-${i} {
+            ${random_yoyo_time*100}% {
+                transform: translate(${random_x_end}vw, ${random_yoyo_y}vh) scale(${random_scale});
+            }
+
+            to {
+                transform: translate(${random_x_end_yoyo}vw, 100vh) scale(${random_scale});
+            }
+            
+        }
+        `
+    }
+
+    add_css(rule);
+}
+
+// Load the rules and execute after the DOM loads
+window.onload = function() {
+    spawnSnowCSS(snowflakes_count);
+    spawn_snow(snowflakes_count);
+};
+
+// TODO add progress bar for slower clients
 
 /* RENDERING */
 let cameraAngle = new THREE.Vector3();
@@ -198,16 +315,123 @@ function render(a) {
   
   renderer.render(scene, camera);
 }
+// Load the snowfall effect
+function loadSnowfallEffect() {
+  let snowflakes_count = 200; // Set the desired number of snowflakes here
+
+  // This function allows you to turn on and off the snow
+  function toggleSnow() {
+    let checkBox = document.getElementById("toggle_snow");
+    if (checkBox.checked) {
+      document.getElementById('snow').style.display = "block";
+    } else {
+      document.getElementById('snow').style.display = "none";
+    }
+  }
+
+  // Creating snowflakes
+  function spawnSnow(snowDensity = 200) {
+    snowDensity -= 1;
+
+    for (let x = 0; x < snowDensity; x++) {
+      let snowflake = document.createElement('div');
+      snowflake.className = "snowflake";
+
+      document.getElementById('snow').appendChild(snowflake);
+    }
+  }
+
+  // Append style for each snowflake to the head
+  function addCSS(rule) {
+    let css = document.createElement('style');
+    css.type = 'text/css';
+    css.appendChild(document.createTextNode(rule));
+    document.getElementsByTagName("head")[0].appendChild(css);
+  }
+
+  // Math
+  function randomInt(value = 100) {
+    return Math.floor(Math.random() * value) + 1;
+  }
+
+  function randomRange(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Create style for snowflake
+  function spawnSnowCSS(snowDensity = 200) {
+    let snowflakeName = "snowflake";
+    let rule = ``;
+
+    for (let i = 1; i < snowDensity; i++) {
+      let randomX = Math.random() * 100; // vw
+      let randomOffset = randomRange(-100000, 100000) * 0.0001; // vw
+      let randomXEnd = randomX + randomOffset;
+      let randomXEndYoyo = randomX + (randomOffset / 2);
+      let randomYoyoTime = randomRange(30000, 80000) / 100000;
+      let randomYoyoY = randomYoyoTime * 100; // vh
+      let randomScale = Math.random();
+      let fallDuration = randomRange(10, 30) * 1; // s
+      let fallDelay = randomInt(30) * -1; // s
+      let opacity = Math.random();
+
+      rule += `
+        .${snowflakeName}:nth-child(${i}) {
+            opacity: ${opacity};
+            transform: translate(${randomX}vw, -10px) scale(${randomScale});
+            animation: fall-${i} ${fallDuration}s ${fallDelay}s linear infinite;
+        }
+
+        @keyframes fall-${i} {
+            ${randomYoyoTime * 100}% {
+                transform: translate(${randomXEnd}vw, ${randomYoyoY}vh) scale(${randomScale});
+            }
+
+            to {
+                transform: translate(${randomXEndYoyo}vw, 100vh) scale(${randomScale});
+            }
+        }
+      `;
+    }
+
+    addCSS(rule);
+  }
+  // Call the function to load the snowfall effect
+
+}
+
 
 /* EVENTS */
 function onWindowResize() {
   var stats;
-var params = {
-  snowfall: 10
-};
+  loadSnowfallEffect();
+
 
 window.addEventListener('load', init);
-
+function initMap() {
+  stats = new Stats();
+  document.body.appendChild( stats.dom );
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 8,
+    center: { lat: 37.7749, lng: -122.4194 },
+  });
+  const flightPlanCoordinates = [
+    { lat: 37.772, lng: -122.214 },
+    { lat: 21.291, lng: -157.821 },
+    { lat: -18.142, lng: 178.431 },
+    { lat: -27.467, lng: 153.027 },
+  ];
+  const flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: "#FF0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+  });
+  flightPath.setMap(map);
+}
 function init() {
   var frame = 5;
   var meshList = [];
@@ -341,6 +565,17 @@ function init() {
       stats.update();
     }
   };
+  function animate() {
+    requestAnimationFrame(animate);
+    
+    // Update controls
+    controls.update();
+    
+    // Render the scene
+    renderer.render(scene, camera);
+}
+
+animate();
   script.src = 'https://cdn.rawgit.com/mrdoob/stats.js/v0.7.0/build/stats.min.js';
   document.head.appendChild(script);
 

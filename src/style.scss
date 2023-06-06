@@ -16,10 +16,10 @@ body {
     width: 100%;
     height: 100%;
     z-index: 100;
-    box-shadow: 0 0 50px rgba(0,0,0,0.3) inset;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.3) inset;
     pointer-events: none;
     @media (min-width: 750px) {
-      box-shadow: 0 0 100px rgba(0,0,0,0.3) inset;
+      box-shadow: 0 0 100px rgba(0, 0, 0, 0.3) inset;
     }
   }
 }
@@ -27,6 +27,12 @@ body {
 canvas {
   position: absolute;
   touch-action: none;
+}
+
+#myCanvas {
+  width: 100%;
+  height: 400px;
+  background-color: transparent;
 }
 
 .ui {
@@ -37,37 +43,44 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  label {
-    display: grid;
-    grid-template-columns: 0 1fr 1fr;
-    align-items: center;
-    background: #57e505;
-    border-radius: 10px;
-    padding: 8px;
-    width: (20px + 16px);
-    overflow: hidden;
-    transition: 0.15s ease-in-out;
-    font-size: 0;
-    & + label {
-      margin-top: 5px;
-    }
-    &:focus-within,
-    &:hover {
-      width: (20px + 16px + 100px + 10px);
-      input {
-        margin-left: 10px;
-        opacity: 1;
-      }
-    }
-  }
-  input {
-    width: 100px;
-    opacity: 0;
-  }
-  svg {
-    flex-shrink: 0;
-    width: 20px;
-  }
+}
+
+.ui label {
+  display: grid;
+  grid-template-columns: 0 1fr 1fr;
+  align-items: center;
+  background: #57e505;
+  border-radius: 10px;
+  padding: 8px;
+  width: calc(20px + 16px);
+  overflow: hidden;
+  transition: 0.15s ease-in-out;
+  font-size: 0;
+}
+
+.ui label + label {
+  margin-top: 5px;
+}
+
+.ui label:focus-within,
+.ui label:hover {
+  width: calc(20px + 16px + 100px + 10px);
+}
+
+.ui label:focus-within input,
+.ui label:hover input {
+  margin-left: 10px;
+  opacity: 1;
+}
+
+.ui input {
+  width: 100px;
+  opacity: 0;
+}
+
+.ui svg {
+  flex-shrink: 0;
+  width: 20px;
 }
 
 .tooltip {
@@ -77,17 +90,22 @@ canvas {
   height: 0;
   width: 0;
   z-index: 1;
-  path:first-child {
-    transition: 0.05s ease-out;
-  }
-  &:focus-within,
-  &:hover {
-    z-index: 2;
-    path:first-child {
-      fill: #09e00d;
-    }
-  }
 }
+
+.tooltip path:first-child {
+  transition: 0.05s ease-out;
+}
+
+.tooltip:focus-within,
+.tooltip:hover {
+  z-index: 2;
+}
+
+.tooltip:focus-within path:first-child,
+.tooltip:hover path:first-child {
+  fill: #09e00d;
+}
+
 p {
   white-space: nowrap;
   color: white;
@@ -104,22 +122,20 @@ p {
   transition: 0.15s ease-out;
   font-weight: 400;
   font-family: 'Oswald', sans-serif;
-  button:focus + &,
-  button:hover + & {
-    opacity: 1;
-  }
 }
+
 button {
   background: none;
   padding: 0;
   border: none;
   height: 0;
   cursor: pointer;
-  svg {
-    width: 20px;
-    margin-left: -10px;
-    transform: translateY(-100%);
-  }
+}
+
+button svg {
+  width: 20px;
+  margin-left: -10px;
+  transform: translateY(-100%);
 }
 
 #compass {
@@ -129,8 +145,57 @@ button {
   width: 50px;
   z-index: 120;
   overflow: visible;
-  path:first-child {
-    stroke: #112b3c;
-    stroke-width: 4px;
-  }
+}
+
+#compass path:first-child {
+  stroke: #112b3c;
+  stroke-width: 4px;
+}
+
+#map-container {
+  position: relative;
+}
+
+#map {
+  height: 400px;
+}
+
+#plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+#myCanvas {
+   
+  width: 100%;
+  height: 400px;
+  background-color: transparent; 
+
+}
+body {
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, #34A65F 0%, #0F8A5F 100%);
+  overflow: hidden;
+  color: white;
+  font-family: 'Inter';
+}
+
+.snowflake {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(white, white); /* Workaround for Chromium's selective color inversion */
+  border-radius: 50%;
+  filter: drop-shadow(0 0 10px white);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }

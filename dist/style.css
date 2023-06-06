@@ -8,27 +8,31 @@ body {
   background: #112B3C;
   height: 100%;
   overflow: hidden;
-}
-body:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3) inset;
-  pointer-events: none;
-}
-@media (min-width: 750px) {
-  body:after {
-    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3) inset;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.3) inset;
+    pointer-events: none;
+    @media (min-width: 750px) {
+      box-shadow: 0 0 100px rgba(0, 0, 0, 0.3) inset;
+    }
   }
 }
 
 canvas {
   position: absolute;
   touch-action: none;
+}
+
+#myCanvas {
+  width: 100%;
+  height: 400px;
+  background-color: black;
 }
 
 .ui {
@@ -40,32 +44,40 @@ canvas {
   flex-direction: column;
   align-items: flex-end;
 }
+
 .ui label {
   display: grid;
   grid-template-columns: 0 1fr 1fr;
   align-items: center;
-  background: #37ee0a;
+  background: #57e505;
   border-radius: 10px;
   padding: 8px;
-  width: 36px;
+  width: calc(20px + 16px);
   overflow: hidden;
   transition: 0.15s ease-in-out;
   font-size: 0;
 }
+
 .ui label + label {
   margin-top: 5px;
 }
-.ui label:focus-within, .ui label:hover {
-  width: 146px;
+
+.ui label:focus-within,
+.ui label:hover {
+  width: calc(20px + 16px + 100px + 10px);
 }
-.ui label:focus-within input, .ui label:hover input {
+
+.ui label:focus-within input,
+.ui label:hover input {
   margin-left: 10px;
   opacity: 1;
 }
+
 .ui input {
   width: 100px;
   opacity: 0;
 }
+
 .ui svg {
   flex-shrink: 0;
   width: 20px;
@@ -79,20 +91,25 @@ canvas {
   width: 0;
   z-index: 1;
 }
+
 .tooltip path:first-child {
   transition: 0.05s ease-out;
 }
-.tooltip:focus-within, .tooltip:hover {
+
+.tooltip:focus-within,
+.tooltip:hover {
   z-index: 2;
 }
-.tooltip:focus-within path:first-child, .tooltip:hover path:first-child {
-  fill: #11cb3c;
+
+.tooltip:focus-within path:first-child,
+.tooltip:hover path:first-child {
+  fill: #09e00d;
 }
 
 p {
   white-space: nowrap;
-  color: rgb(255, 255, 255);
-  background: #0c440ec9;
+  color: white;
+  background: #EFEFEF;
   color: #112B3C;
   position: absolute;
   top: 0;
@@ -104,10 +121,7 @@ p {
   opacity: 0;
   transition: 0.15s ease-out;
   font-weight: 400;
-  font-family: "Oswald", sans-serif;
-}
-button:focus + p, button:hover + p {
-  opacity: 1;
+  font-family: 'Oswald', sans-serif;
 }
 
 button {
@@ -117,13 +131,7 @@ button {
   height: 0;
   cursor: pointer;
 }
-.summit button svg {
-  fill: green;
-}
 
-.summit p {
-  color: green;
-}
 button svg {
   width: 20px;
   margin-left: -10px;
@@ -138,7 +146,50 @@ button svg {
   z-index: 120;
   overflow: visible;
 }
+
 #compass path:first-child {
   stroke: #112b3c;
   stroke-width: 4px;
+}
+
+#map-container {
+  position: relative;
+}
+
+#map {
+  height: 400px;
+}
+
+#plane {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+
+body {
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, #34A65F 0%, #0F8A5F 100%);
+  overflow: hidden;
+  color: white;
+  font-family: 'Inter';
+}
+
+.snowflake {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(white, white); /* Workaround for Chromium's selective color inversion */
+  border-radius: 50%;
+  filter: drop-shadow(0 0 10px white);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
